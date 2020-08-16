@@ -1,0 +1,42 @@
+//-------------------------------------------------------------------------
+//
+// Game data for Laszlow
+// Modified from the TTT one 
+//
+//-------------------------------------------------------------------------
+
+@include "base.fgd" 
+
+@BaseClass = LinkedPortalDoor : "An entity that can be linked to another door and create a passage between them dynamically."
+[
+	partnername(target_destination) : "Linked Partner" : : "Another 'prop_linked_portal_door' entity which will link to this one."
+
+	input SetPartner(string) : "Set a new partner door."
+	input EnableTeleport(integer) : "Set whether the portal teleport is enabled."
+	input Open(void) : "Open the door and cause the portal to activate."
+	input Close(void) : "Close the door and cause the portal to deactivate."
+
+	output OnOpen(void) : "Called when the door has started its open animation."
+	output OnClose(void) : "Called when the door has started its close animation."
+	output OnEntityTeleportFromMe(void)		: "When any entity is teleported from this portal to the linked partner."
+	output OnPlayerTeleportFromMe(void)		: "When the player is teleported from this portal to the linked partner."
+	output OnEntityTeleportToMe(void)		: "When any entity is teleported from this linked partner to the portal."
+	output OnPlayerTeleportToMe(void)		: "When the player is teleported from this linked partner to the portal."
+]
+
+@PointClass base(Targetname, Parentname, Angles, LinkedPortalDoor) sphere(DisappearDist) studio("models/editor/axis_helper_thick.mdl") = linked_portal_door :
+"A door which is linked by a portal to another 'linked_portal_door' entity."
+[
+	width(integer) : "Width" : 128 : "Width of the desired portal. Measured from the center"
+	height(integer) : "Height" : 128 : "Height of the desired portal. Measured from the center"
+	startactive(integer) : "Start Active" : 1 : "Whether to start the linkage as active from the start."
+	DisappearDist(integer)    : "Disappear Distance" : -1 : "Distance at which the portal will stop rendering"
+	EnableTeleport(integer) : "Enable Teleport" : 1 : "Whether to enable the portal teleport"
+]
+
+
+@PointClass base(Targetname, Origin) studioprop("models/props_lab/keypad.mdl") = door_keypad : "A Keypad for controlling door access etc."
+[
+	output OnSuccess(void) : "Called when access is granted"
+	output OnFailure(void) : "Called when access is denied"
+]
